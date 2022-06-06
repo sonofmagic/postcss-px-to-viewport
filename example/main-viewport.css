@@ -1,5 +1,5 @@
 .class {
-  margin: -3.125vw .5vh;
+  margin: -3.125vw 0.5vh;
   padding: 5vmin 2.96875vw 1px;
   border: 0.9375vw solid black;
   border-bottom-width: 1px;
@@ -21,7 +21,7 @@
 
 .class4-ignore::before {
   content: '';
-  width: 10px;
+  width: 101px;
   padding: 3.125vw;
   height: 10px;
   border: solid 2px #000;

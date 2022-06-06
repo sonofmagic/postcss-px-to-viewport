@@ -1,15 +1,24 @@
-'use strict';
+'use strict'
 
-var fs = require('fs');
-var postcss = require('postcss');
-var pxToViewport = require('..');
-var css = fs.readFileSync('main.css', 'utf8');
+var fs = require('fs')
+const path = require('path')
+var postcss = require('postcss')
+var pxToViewport = require('../dist')
 
-var processedCss = postcss(pxToViewport()).process(css).css;
+var css = fs.readFileSync(path.resolve(__dirname, 'main.css'), 'utf8')
 
-fs.writeFile('main-viewport.css', processedCss, function (err) {
-  if (err) {
-    throw err;
+var processedCss = postcss(pxToViewport()).process(css, {
+  from: path.resolve(__dirname, 'main.css'),
+  to: path.resolve(__dirname, 'main-viewport.css')
+}).css
+
+fs.writeFile(
+  path.resolve(__dirname, 'main-viewport.css'),
+  processedCss,
+  function (err) {
+    if (err) {
+      throw err
+    }
+    console.log('File with viewport units written.')
   }
-  console.log('File with viewport units written.');
-});
+)

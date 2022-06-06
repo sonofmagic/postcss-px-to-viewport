@@ -1,5 +1,5 @@
 .class {
-  margin: -10px .5vh;
+  margin: -10px 0.5vh;
   padding: 5vmin 9.5px 1px;
   border: 3px solid black;
   border-bottom-width: 1px;
@@ -22,7 +22,7 @@
 .class4-ignore::before {
   content: '';
   /* px-to-viewport-ignore-next */
-  width: 10px;
+  width: 101px;
   padding: 10px;
   height: 10px; /* px-to-viewport-ignore */
   border: solid 2px #000; /* px-to-viewport-ignore */
