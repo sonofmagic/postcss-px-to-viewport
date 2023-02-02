@@ -11,27 +11,8 @@ import {
   isRepeatRun,
   checkMediaQuery
 } from './utils'
-import { Options } from './type'
-
-const defaults: Required<Omit<Options, 'exclude' | 'include' | 'rules'>> = {
-  unitToConvert: 'px',
-  viewportWidth: 320,
-  // viewportHeight: 568, // not now used; TODO: need for different units and math for different properties
-  unitPrecision: 5,
-  viewportUnit: 'vw',
-  fontViewportUnit: 'vw', // vmin is more suitable.
-  selectorBlackList: [],
-  propList: ['*'],
-  minPixelValue: 1,
-  mediaQuery: false,
-  replace: true,
-  landscape: false,
-  landscapeUnit: 'vw',
-  landscapeWidth: 568
-}
-
-const ignoreNextComment = 'px-to-viewport-ignore-next'
-const ignorePrevComment = 'px-to-viewport-ignore'
+import type { Options } from './type'
+import { defaults, ignoreNextComment, ignorePrevComment } from './options'
 
 function pxToViewport(options?: Options) {
   const opts: Options = {
@@ -103,6 +84,7 @@ function pxToViewport(options?: Options) {
             next.text === ignorePrevComment
           ) {
             if (/\n/.test(next.raws.before!)) {
+              // eslint-disable-next-line no-new
               new Warning(
                 'Unexpected comment /* ' +
                   ignorePrevComment +
