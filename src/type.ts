@@ -1,7 +1,4 @@
-export type OptionsRules = [
-  test: string | RegExp,
-  fn: (pixels: number, parsedVal: number, prop: string) => string
-][]
+export type OptionsRules = [test: string | RegExp, fn: (pixels: number, parsedVal: number, prop: string) => string][]
 
 export interface Options {
   /**

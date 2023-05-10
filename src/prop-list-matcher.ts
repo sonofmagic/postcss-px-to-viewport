@@ -1,35 +1,27 @@
 export const filterPropList = {
   exact(list: string[]) {
-    return list.filter(m => m.match(/^[^*!]+$/))
+    return list.filter((m) => m.match(/^[^*!]+$/))
   },
   contain(list: string[]) {
-    return list
-      .filter(m => m.match(/^\*.+\*$/))
-      .map(m => m.substring(1, m.length - 1))
+    return list.filter((m) => m.match(/^\*.+\*$/)).map((m) => m.substring(1, m.length - 1))
   },
   endWith: function (list: string[]) {
-    return list.filter(m => m.match(/^\*[^*]+$/)).map(m => m.substring(1))
+    return list.filter((m) => m.match(/^\*[^*]+$/)).map((m) => m.substring(1))
   },
   startWith: function (list: string[]) {
-    return list
-      .filter(m => m.match(/^[^*!]+\*$/))
-      .map(m => m.substring(0, m.length - 1))
+    return list.filter((m) => m.match(/^[^*!]+\*$/)).map((m) => m.substring(0, m.length - 1))
   },
   notExact: function (list: string[]) {
-    return list.filter(m => m.match(/^![^*].*$/)).map(m => m.substring(1))
+    return list.filter((m) => m.match(/^![^*].*$/)).map((m) => m.substring(1))
   },
   notContain: function (list: string[]) {
-    return list
-      .filter(m => m.match(/^!\*.+\*$/))
-      .map(m => m.substring(2, m.length - 1))
+    return list.filter((m) => m.match(/^!\*.+\*$/)).map((m) => m.substring(2, m.length - 1))
   },
   notEndWith: function (list: string[]) {
-    return list.filter(m => m.match(/^!\*[^*]+$/)).map(m => m.substring(2))
+    return list.filter((m) => m.match(/^!\*[^*]+$/)).map((m) => m.substring(2))
   },
   notStartWith: function (list: string[]) {
-    return list
-      .filter(m => m.match(/^![^*]+\*$/))
-      .map(m => m.substring(1, m.length - 1))
+    return list.filter((m) => m.match(/^![^*]+\*$/)).map((m) => m.substring(1, m.length - 1))
   }
 }
 
@@ -51,14 +43,14 @@ export function createPropListMatcher(propList: string[]) {
     return (
       (hasWild ||
         lists.exact.indexOf(prop) > -1 ||
-        lists.contain.some(m => prop.indexOf(m) > -1) ||
-        lists.startWith.some(m => prop.indexOf(m) === 0) ||
-        lists.endWith.some(m => prop.indexOf(m) === prop.length - m.length)) &&
+        lists.contain.some((m) => prop.indexOf(m) > -1) ||
+        lists.startWith.some((m) => prop.indexOf(m) === 0) ||
+        lists.endWith.some((m) => prop.indexOf(m) === prop.length - m.length)) &&
       !(
         lists.notExact.indexOf(prop) > -1 ||
-        lists.notContain.some(m => prop.indexOf(m) > -1) ||
-        lists.notStartWith.some(m => prop.indexOf(m) === 0) ||
-        lists.notEndWith.some(m => prop.indexOf(m) === prop.length - m.length)
+        lists.notContain.some((m) => prop.indexOf(m) > -1) ||
+        lists.notStartWith.some((m) => prop.indexOf(m) === 0) ||
+        lists.notEndWith.some((m) => prop.indexOf(m) === prop.length - m.length)
       )
     )
   }

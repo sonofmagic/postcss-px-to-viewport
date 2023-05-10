@@ -1,16 +1,7 @@
 import { AtRule, Plugin, Rule } from 'postcss'
 import { createPropListMatcher } from './prop-list-matcher'
 import { getUnitRegexp } from './pixel-unit-regexp'
-import {
-  getUnit,
-  createPxReplace,
-  checkRegExpOrArray,
-  declarationExists,
-  validateParams,
-  validateRule,
-  isRepeatRun,
-  checkMediaQuery
-} from './utils'
+import { getUnit, createPxReplace, checkRegExpOrArray, declarationExists, validateParams, validateRule, isRepeatRun, checkMediaQuery } from './utils'
 import type { Options } from './type'
 import { defaults, ignoreNextComment, ignorePrevComment } from './options'
 
@@ -47,15 +38,7 @@ function pxToViewport(options?: Options) {
           if (opts.landscape && !params) {
             landscapeRule?.append(
               decl.clone({
-                value: decl.value.replace(
-                  pxRegex,
-                  createPxReplace(
-                    opts,
-                    opts.landscapeUnit!,
-                    opts.landscapeWidth!,
-                    decl
-                  )
-                )
+                value: decl.value.replace(pxRegex, createPxReplace(opts, opts.landscapeUnit!, opts.landscapeWidth!, decl))
               })
             )
           }
@@ -67,30 +50,17 @@ function pxToViewport(options?: Options) {
 
           const prev = decl.prev()
           // prev declaration is ignore conversion comment at same line
-          if (
-            prev &&
-            prev.type === 'comment' &&
-            prev.text === ignoreNextComment
-          ) {
+          if (prev && prev.type === 'comment' && prev.text === ignoreNextComment) {
             // remove comment
             prev.remove()
             return
           }
           const next = decl.next()
           // next declaration is ignore conversion comment at same line
-          if (
-            next &&
-            next.type === 'comment' &&
-            next.text === ignorePrevComment
-          ) {
+          if (next && next.type === 'comment' && next.text === ignorePrevComment) {
             if (/\n/.test(next.raws.before!)) {
               // eslint-disable-next-line no-new
-              new Warning(
-                'Unexpected comment /* ' +
-                  ignorePrevComment +
-                  ' */ must be after declaration at same line.',
-                { node: next }
-              )
+              new Warning('Unexpected comment /* ' + ignorePrevComment + ' */ must be after declaration at same line.', { node: next })
             } else {
               // remove comment
               next.remove()
@@ -108,10 +78,7 @@ function pxToViewport(options?: Options) {
             size = opts.viewportWidth!
           }
 
-          const value = decl.value.replace(
-            pxRegex,
-            createPxReplace(opts, unit, size, decl)
-          )
+          const value = decl.value.replace(pxRegex, createPxReplace(opts, unit, size, decl))
 
           if (declarationExists(decl.parent!, decl.prop, value)) return
 

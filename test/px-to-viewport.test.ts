@@ -12,10 +12,8 @@ const basicCSS = '.rule { font-size: 15px }'
 
 describe('px-to-viewport', () => {
   it('should work on the readme example', () => {
-    const input =
-      'h1 { margin: 0 0 20px; font-size: 32px; line-height: 2; letter-spacing: 1px; }'
-    const output =
-      'h1 { margin: 0 0 6.25vw; font-size: 10vw; line-height: 2; letter-spacing: 1px; }'
+    const input = 'h1 { margin: 0 0 20px; font-size: 32px; line-height: 2; letter-spacing: 1px; }'
+    const output = 'h1 { margin: 0 0 6.25vw; font-size: 10vw; line-height: 2; letter-spacing: 1px; }'
     const processed = postcss(pxToViewport()).process(input).css
 
     expect(processed).toBe(output)
@@ -55,9 +53,7 @@ describe('px-to-viewport', () => {
 
   it('should not replace units inside mediaQueries by default', () => {
     const expected = '@media (min-width: 500px) { .rule { font-size: 16px } }'
-    const processed = postcss(pxToViewport()).process(
-      '@media (min-width: 500px) { .rule { font-size: 16px } }'
-    ).css
+    const processed = postcss(pxToViewport()).process('@media (min-width: 500px) { .rule { font-size: 16px } }').css
 
     expect(processed).toBe(expected)
   })
@@ -68,10 +64,8 @@ describe('value parsing', () => {
     const options = {
       propList: ['*']
     }
-    const rules =
-      '.rule { content: \'16px\'; font-family: "16px"; font-size: 16px; }'
-    const expected =
-      '.rule { content: \'16px\'; font-family: "16px"; font-size: 5vw; }'
+    const rules = '.rule { content: \'16px\'; font-family: "16px"; font-size: 16px; }'
+    const expected = '.rule { content: \'16px\'; font-family: "16px"; font-size: 5vw; }'
     const processed = postcss(pxToViewport(options)).process(rules).css
 
     expect(processed).toBe(expected)
@@ -86,10 +80,8 @@ describe('value parsing', () => {
   })
 
   it('should not replace values with an uppercase P or X', () => {
-    const rules =
-      '.rule { margin: 12px calc(100% - 14PX); height: calc(100% - 20px); font-size: 12Px; line-height: 16px; }'
-    const expected =
-      '.rule { margin: 3.75vw calc(100% - 14PX); height: calc(100% - 6.25vw); font-size: 12Px; line-height: 5vw; }'
+    const rules = '.rule { margin: 12px calc(100% - 14PX); height: calc(100% - 20px); font-size: 12Px; line-height: 16px; }'
+    const expected = '.rule { margin: 3.75vw calc(100% - 14PX); height: calc(100% - 6.25vw); font-size: 12Px; line-height: 5vw; }'
     const processed = postcss(pxToViewport()).process(rules).css
 
     expect(processed).toBe(expected)
@@ -186,10 +178,8 @@ describe('selectorBlackList', () => {
   })
 
   it('should ignore every selector with `body$`', () => {
-    const rules =
-      'body { font-size: 16px; } .class-body$ { font-size: 16px; } .simple-class { font-size: 16px; }'
-    const expected =
-      'body { font-size: 5vw; } .class-body$ { font-size: 16px; } .simple-class { font-size: 5vw; }'
+    const rules = 'body { font-size: 16px; } .class-body$ { font-size: 16px; } .simple-class { font-size: 16px; }'
+    const expected = 'body { font-size: 5vw; } .class-body$ { font-size: 16px; } .simple-class { font-size: 5vw; }'
     const options = {
       selectorBlackList: ['body$']
     }
@@ -199,10 +189,8 @@ describe('selectorBlackList', () => {
   })
 
   it('should only ignore exactly `body`', () => {
-    const rules =
-      'body { font-size: 16px; } .class-body { font-size: 16px; } .simple-class { font-size: 16px; }'
-    const expected =
-      'body { font-size: 16px; } .class-body { font-size: 5vw; } .simple-class { font-size: 5vw; }'
+    const rules = 'body { font-size: 16px; } .class-body { font-size: 16px; } .simple-class { font-size: 16px; }'
+    const expected = 'body { font-size: 16px; } .class-body { font-size: 5vw; } .simple-class { font-size: 5vw; }'
     const options = {
       selectorBlackList: [/^body$/]
     }
@@ -217,9 +205,7 @@ describe('mediaQuery', () => {
     const options = {
       mediaQuery: true
     }
-    const processed = postcss(pxToViewport(options)).process(
-      '@media (min-width: 500px) { .rule { font-size: 16px } }'
-    ).css
+    const processed = postcss(pxToViewport(options)).process('@media (min-width: 500px) { .rule { font-size: 16px } }').css
     const expected = '@media (min-width: 500px) { .rule { font-size: 5vw } }'
 
     expect(processed).toBe(expected)
@@ -229,9 +215,7 @@ describe('mediaQuery', () => {
     const options = {
       mediaQuery: false
     }
-    const processed = postcss(pxToViewport(options)).process(
-      '@media (min-width: 500px) { .rule { font-size: 16px } }'
-    ).css
+    const processed = postcss(pxToViewport(options)).process('@media (min-width: 500px) { .rule { font-size: 16px } }').css
     const expected = '@media (min-width: 500px) { .rule { font-size: 16px } }'
 
     expect(processed).toBe(expected)
@@ -242,11 +226,8 @@ describe('mediaQuery', () => {
       mediaQuery: true,
       landscape: true
     }
-    const processed = postcss(pxToViewport(options)).process(
-      '@media (orientation-landscape) and (min-width: 500px) { .rule { font-size: 16px } }'
-    ).css
-    const expected =
-      '@media (orientation-landscape) and (min-width: 500px) { .rule { font-size: 2.8169vw } }'
+    const processed = postcss(pxToViewport(options)).process('@media (orientation-landscape) and (min-width: 500px) { .rule { font-size: 16px } }').css
+    const expected = '@media (orientation-landscape) and (min-width: 500px) { .rule { font-size: 2.8169vw } }'
 
     expect(processed).toBe(expected)
   })
@@ -255,11 +236,8 @@ describe('mediaQuery', () => {
     const options = {
       mediaQuery: /min-width/
     }
-    const processed = postcss(pxToViewport(options)).process(
-      '@media (orientation-landscape) and (min-width: 500px) { .rule { font-size: 16px } }'
-    ).css
-    const expected =
-      '@media (orientation-landscape) and (min-width: 500px) { .rule { font-size: 5vw } }'
+    const processed = postcss(pxToViewport(options)).process('@media (orientation-landscape) and (min-width: 500px) { .rule { font-size: 16px } }').css
+    const expected = '@media (orientation-landscape) and (min-width: 500px) { .rule { font-size: 5vw } }'
 
     expect(processed).toBe(expected)
   })
@@ -268,11 +246,8 @@ describe('mediaQuery', () => {
     const options = {
       mediaQuery: /min-width/
     }
-    const processed = postcss(pxToViewport(options)).process(
-      '@media (orientation-landscape) { .rule { font-size: 16px } }'
-    ).css
-    const expected =
-      '@media (orientation-landscape) { .rule { font-size: 16px } }'
+    const processed = postcss(pxToViewport(options)).process('@media (orientation-landscape) { .rule { font-size: 16px } }').css
+    const expected = '@media (orientation-landscape) { .rule { font-size: 16px } }'
 
     expect(processed).toBe(expected)
   })
@@ -281,9 +256,7 @@ describe('mediaQuery', () => {
     const options = {
       mediaQuery: [/min-width/, /max-width/]
     }
-    const processed = postcss(pxToViewport(options)).process(
-      '@media (max-width: 500px) { .rule { font-size: 16px } }'
-    ).css
+    const processed = postcss(pxToViewport(options)).process('@media (max-width: 500px) { .rule { font-size: 16px } }').css
     const expected = '@media (max-width: 500px) { .rule { font-size: 5vw } }'
 
     expect(processed).toBe(expected)
@@ -293,11 +266,8 @@ describe('mediaQuery', () => {
     const options = {
       mediaQuery: [/min-width/, /max-width/]
     }
-    const processed = postcss(pxToViewport(options)).process(
-      '@media (orientation-landscape) { .rule { font-size: 16px } }'
-    ).css
-    const expected =
-      '@media (orientation-landscape) { .rule { font-size: 16px } }'
+    const processed = postcss(pxToViewport(options)).process('@media (orientation-landscape) { .rule { font-size: 16px } }').css
+    const expected = '@media (orientation-landscape) { .rule { font-size: 16px } }'
 
     expect(processed).toBe(expected)
   })
@@ -305,10 +275,8 @@ describe('mediaQuery', () => {
 
 describe('propList', () => {
   it('should only replace properties in the prop list', () => {
-    const css =
-      '.rule { font-size: 16px; margin: 16px; margin-left: 5px; padding: 5px; padding-right: 16px }'
-    const expected =
-      '.rule { font-size: 5vw; margin: 5vw; margin-left: 5px; padding: 5px; padding-right: 5vw }'
+    const css = '.rule { font-size: 16px; margin: 16px; margin-left: 5px; padding: 5px; padding-right: 16px }'
+    const expected = '.rule { font-size: 5vw; margin: 5vw; margin-left: 5px; padding: 5px; padding-right: 5vw }'
     const options = {
       propList: ['*font*', 'margin*', '!margin-left', '*-right', 'pad']
     }
@@ -318,10 +286,8 @@ describe('propList', () => {
   })
 
   it('should only replace properties in the prop list with wildcard', () => {
-    const css =
-      '.rule { font-size: 16px; margin: 16px; margin-left: 5px; padding: 5px; padding-right: 16px }'
-    const expected =
-      '.rule { font-size: 16px; margin: 5vw; margin-left: 5px; padding: 5px; padding-right: 16px }'
+    const css = '.rule { font-size: 16px; margin: 16px; margin-left: 5px; padding: 5px; padding-right: 16px }'
+    const expected = '.rule { font-size: 16px; margin: 5vw; margin-left: 5px; padding: 5px; padding-right: 16px }'
     const options = {
       propList: ['*', '!margin-left', '!*padding*', '!font*']
     }
@@ -345,10 +311,8 @@ describe('minPixelValue', () => {
       propWhiteList: [],
       minPixelValue: 2
     }
-    const rules =
-      '.rule { border: 1px solid #000; font-size: 16px; margin: 1px 10px; }'
-    const expected =
-      '.rule { border: 1px solid #000; font-size: 5vw; margin: 1px 3.125vw; }'
+    const rules = '.rule { border: 1px solid #000; font-size: 16px; margin: 1px 10px; }'
+    const expected = '.rule { border: 1px solid #000; font-size: 5vw; margin: 1px 3.125vw; }'
     const processed = postcss(pxToViewport(options)).process(rules).css
 
     expect(processed).toBe(expected)
@@ -356,10 +320,8 @@ describe('minPixelValue', () => {
 })
 
 describe('exclude', () => {
-  const rules =
-    '.rule { border: 1px solid #000; font-size: 16px; margin: 1px 10px; }'
-  const covered =
-    '.rule { border: 1px solid #000; font-size: 5vw; margin: 1px 3.125vw; }'
+  const rules = '.rule { border: 1px solid #000; font-size: 16px; margin: 1px 10px; }'
+  const covered = '.rule { border: 1px solid #000; font-size: 5vw; margin: 1px 3.125vw; }'
   it('when using regex at the time, the style should not be overwritten.', () => {
     const options = {
       exclude: /\/node_modules\//
@@ -406,10 +368,8 @@ describe('exclude', () => {
 })
 
 describe('include', () => {
-  const rules =
-    '.rule { border: 1px solid #000; font-size: 16px; margin: 1px 10px; }'
-  const covered =
-    '.rule { border: 1px solid #000; font-size: 5vw; margin: 1px 3.125vw; }'
+  const rules = '.rule { border: 1px solid #000; font-size: 16px; margin: 1px 10px; }'
+  const covered = '.rule { border: 1px solid #000; font-size: 5vw; margin: 1px 3.125vw; }'
   it('when using regex at the time, the style should not be overwritten.', () => {
     const options = {
       include: /\/mobile\//
@@ -456,10 +416,8 @@ describe('include', () => {
 })
 
 describe('include-and-exclude', () => {
-  const rules =
-    '.rule { border: 1px solid #000; font-size: 16px; margin: 1px 10px; }'
-  const covered =
-    '.rule { border: 1px solid #000; font-size: 5vw; margin: 1px 3.125vw; }'
+  const rules = '.rule { border: 1px solid #000; font-size: 16px; margin: 1px 10px; }'
+  const covered = '.rule { border: 1px solid #000; font-size: 5vw; margin: 1px 3.125vw; }'
 
   it('when using regex at the time, the style should not be overwritten.', () => {
     const options = {
@@ -511,10 +469,8 @@ describe('include-and-exclude', () => {
 })
 
 describe('regex', () => {
-  const rules =
-    '.rule { border: 1px solid #000; font-size: 16px; margin: 1px 10px; }'
-  const covered =
-    '.rule { border: 1px solid #000; font-size: 5vw; margin: 1px 3.125vw; }'
+  const rules = '.rule { border: 1px solid #000; font-size: 16px; margin: 1px 10px; }'
+  const covered = '.rule { border: 1px solid #000; font-size: 5vw; margin: 1px 3.125vw; }'
 
   it('when using regex at the time, the style should not be overwritten.', () => {
     const options = {
@@ -575,113 +531,49 @@ describe('replace', () => {
 
 describe('filter-prop-list', () => {
   it('should find "exact" matches from propList', () => {
-    const propList = [
-      'font-size',
-      'margin',
-      '!padding',
-      '*border*',
-      '*',
-      '*y',
-      '!*font*'
-    ]
+    const propList = ['font-size', 'margin', '!padding', '*border*', '*', '*y', '!*font*']
     const expected = 'font-size,margin'
     expect(filterPropList.exact(propList).join()).toBe(expected)
   })
 
   it('should find "contain" matches from propList and reduce to string', () => {
-    const propList = [
-      'font-size',
-      '*margin*',
-      '!padding',
-      '*border*',
-      '*',
-      '*y',
-      '!*font*'
-    ]
+    const propList = ['font-size', '*margin*', '!padding', '*border*', '*', '*y', '!*font*']
     const expected = 'margin,border'
     expect(filterPropList.contain(propList).join()).toBe(expected)
   })
 
   it('should find "start" matches from propList and reduce to string', () => {
-    const propList = [
-      'font-size',
-      '*margin*',
-      '!padding',
-      'border*',
-      '*',
-      '*y',
-      '!*font*'
-    ]
+    const propList = ['font-size', '*margin*', '!padding', 'border*', '*', '*y', '!*font*']
     const expected = 'border'
     expect(filterPropList.startWith(propList).join()).toBe(expected)
   })
 
   it('should find "end" matches from propList and reduce to string', () => {
-    const propList = [
-      'font-size',
-      '*margin*',
-      '!padding',
-      'border*',
-      '*',
-      '*y',
-      '!*font*'
-    ]
+    const propList = ['font-size', '*margin*', '!padding', 'border*', '*', '*y', '!*font*']
     const expected = 'y'
     expect(filterPropList.endWith(propList).join()).toBe(expected)
   })
 
   it('should find "not" matches from propList and reduce to string', () => {
-    const propList = [
-      'font-size',
-      '*margin*',
-      '!padding',
-      'border*',
-      '*',
-      '*y',
-      '!*font*'
-    ]
+    const propList = ['font-size', '*margin*', '!padding', 'border*', '*', '*y', '!*font*']
     const expected = 'padding'
     expect(filterPropList.notExact(propList).join()).toBe(expected)
   })
 
   it('should find "not contain" matches from propList and reduce to string', () => {
-    const propList = [
-      'font-size',
-      '*margin*',
-      '!padding',
-      '!border*',
-      '*',
-      '*y',
-      '!*font*'
-    ]
+    const propList = ['font-size', '*margin*', '!padding', '!border*', '*', '*y', '!*font*']
     const expected = 'font'
     expect(filterPropList.notContain(propList).join()).toBe(expected)
   })
 
   it('should find "not start" matches from propList and reduce to string', () => {
-    const propList = [
-      'font-size',
-      '*margin*',
-      '!padding',
-      '!border*',
-      '*',
-      '*y',
-      '!*font*'
-    ]
+    const propList = ['font-size', '*margin*', '!padding', '!border*', '*', '*y', '!*font*']
     const expected = 'border'
     expect(filterPropList.notStartWith(propList).join()).toBe(expected)
   })
 
   it('should find "not end" matches from propList and reduce to string', () => {
-    const propList = [
-      'font-size',
-      '*margin*',
-      '!padding',
-      '!border*',
-      '*',
-      '!*y',
-      '!*font*'
-    ]
+    const propList = ['font-size', '*margin*', '!padding', '!border*', '*', '!*y', '!*font*']
     const expected = 'y'
     expect(filterPropList.notEndWith(propList).join()).toBe(expected)
   })
@@ -689,8 +581,7 @@ describe('filter-prop-list', () => {
 
 describe('landscape', () => {
   it('should add landscape atRule', () => {
-    const css =
-      '.rule { font-size: 16px; margin: 16px; margin-left: 5px; padding: 5px; padding-right: 16px }'
+    const css = '.rule { font-size: 16px; margin: 16px; margin-left: 5px; padding: 5px; padding-right: 16px }'
     const expected =
       '.rule { font-size: 5vw; margin: 5vw; margin-left: 1.5625vw; padding: 1.5625vw; padding-right: 5vw }@media (orientation: landscape) {.rule { font-size: 2.8169vw; margin: 2.8169vw; margin-left: 0.88028vw; padding: 0.88028vw; padding-right: 2.8169vw } }'
     const options = {
@@ -702,8 +593,7 @@ describe('landscape', () => {
   })
 
   it('should add landscape atRule with specified landscapeUnits', () => {
-    const css =
-      '.rule { font-size: 16px; margin: 16px; margin-left: 5px; padding: 5px; padding-right: 16px }'
+    const css = '.rule { font-size: 16px; margin: 16px; margin-left: 5px; padding: 5px; padding-right: 16px }'
     const expected =
       '.rule { font-size: 5vw; margin: 5vw; margin-left: 1.5625vw; padding: 1.5625vw; padding-right: 5vw }@media (orientation: landscape) {.rule { font-size: 2.8169vh; margin: 2.8169vh; margin-left: 0.88028vh; padding: 0.88028vh; padding-right: 2.8169vh } }'
     const options = {
@@ -733,8 +623,7 @@ describe('landscape', () => {
       landscape: true
     }
     const processed = postcss(pxToViewport(options)).process(basicCSS).css
-    const expected =
-      '.rule { font-size: 15px; font-size: 4.6875vw }@media (orientation: landscape) {.rule { font-size: 2.64085vw } }'
+    const expected = '.rule { font-size: 15px; font-size: 4.6875vw }@media (orientation: landscape) {.rule { font-size: 2.64085vw } }'
 
     expect(processed).toBe(expected)
   })
@@ -745,8 +634,7 @@ describe('landscape', () => {
       landscapeWidth: 768
     }
     const processed = postcss(pxToViewport(options)).process(basicCSS).css
-    const expected =
-      '.rule { font-size: 4.6875vw }@media (orientation: landscape) {.rule { font-size: 1.95313vw } }'
+    const expected = '.rule { font-size: 4.6875vw }@media (orientation: landscape) {.rule { font-size: 1.95313vw } }'
 
     expect(processed).toBe(expected)
   })
@@ -765,10 +653,8 @@ describe('landscape', () => {
 
 describe('/* px-to-viewport-ignore */ & /* px-to-viewport-ignore-next */', () => {
   it('should ignore right-commented', () => {
-    const css =
-      '.rule { font-size: 15px; /* simple comment */ width: 100px; /* px-to-viewport-ignore */ height: 50px; }'
-    const expected =
-      '.rule { font-size: 4.6875vw; /* simple comment */ width: 100px; height: 15.625vw; }'
+    const css = '.rule { font-size: 15px; /* simple comment */ width: 100px; /* px-to-viewport-ignore */ height: 50px; }'
+    const expected = '.rule { font-size: 4.6875vw; /* simple comment */ width: 100px; height: 15.625vw; }'
 
     const processed = postcss(pxToViewport()).process(css).css
 
@@ -776,10 +662,8 @@ describe('/* px-to-viewport-ignore */ & /* px-to-viewport-ignore-next */', () =>
   })
 
   it('should ignore right-commented in multiline-css', () => {
-    const css =
-      '.rule {\n  font-size: 15px;\n  width: 100px; /*px-to-viewport-ignore*/\n  height: 50px;\n}'
-    const expected =
-      '.rule {\n  font-size: 4.6875vw;\n  width: 100px;\n  height: 15.625vw;\n}'
+    const css = '.rule {\n  font-size: 15px;\n  width: 100px; /*px-to-viewport-ignore*/\n  height: 50px;\n}'
+    const expected = '.rule {\n  font-size: 4.6875vw;\n  width: 100px;\n  height: 15.625vw;\n}'
 
     const processed = postcss(pxToViewport()).process(css).css
 
@@ -787,10 +671,8 @@ describe('/* px-to-viewport-ignore */ & /* px-to-viewport-ignore-next */', () =>
   })
 
   it('should ignore before-commented in multiline-css', () => {
-    const css =
-      '.rule {\n  font-size: 15px;\n  /*px-to-viewport-ignore-next*/\n  width: 100px;\n  /*px-to-viewport-ignore*/\n  height: 50px;\n}'
-    const expected =
-      '.rule {\n  font-size: 4.6875vw;\n  width: 100px;\n  /*px-to-viewport-ignore*/\n  height: 15.625vw;\n}'
+    const css = '.rule {\n  font-size: 15px;\n  /*px-to-viewport-ignore-next*/\n  width: 100px;\n  /*px-to-viewport-ignore*/\n  height: 50px;\n}'
+    const expected = '.rule {\n  font-size: 4.6875vw;\n  width: 100px;\n  /*px-to-viewport-ignore*/\n  height: 15.625vw;\n}'
 
     const processed = postcss(pxToViewport()).process(css).css
 
@@ -802,9 +684,7 @@ describe('rules', () => {
   it('when using regex at the time, the style should use custom rule.', () => {
     const expected = `.rule { font-size: 15vw }`
 
-    const processed = postcss(
-      pxToViewport({ rules: [[/\/node_modules\//, p => p + 'vw']] })
-    ).process(basicCSS, {
+    const processed = postcss(pxToViewport({ rules: [[/\/node_modules\//, (p) => p + 'vw']] })).process(basicCSS, {
       from: '/node_modules/main.css'
     }).css
 
@@ -814,9 +694,7 @@ describe('rules', () => {
   it('when using regex at the time, the style should not use custom rule.', () => {
     const expected = `.rule { font-size: 4.6875vw }`
 
-    const processed = postcss(
-      pxToViewport({ rules: [[/\/node_modules\//, p => p + 'vw']] })
-    ).process(basicCSS, {
+    const processed = postcss(pxToViewport({ rules: [[/\/node_modules\//, (p) => p + 'vw']] })).process(basicCSS, {
       from: '/example/main.css'
     }).css
 
@@ -826,9 +704,7 @@ describe('rules', () => {
   it('when using string at the time, the style should use custom rule.', () => {
     const expected = `.rule { font-size: 15vw }`
 
-    const processed = postcss(
-      pxToViewport({ rules: [['node_modules', p => p + 'vw']] })
-    ).process(basicCSS, {
+    const processed = postcss(pxToViewport({ rules: [['node_modules', (p) => p + 'vw']] })).process(basicCSS, {
       from: '/node_modules/main.css'
     }).css
 
@@ -838,9 +714,7 @@ describe('rules', () => {
   it('when using string at the time, the style should not use custom rule.', () => {
     const expected = `.rule { font-size: 4.6875vw }`
 
-    const processed = postcss(
-      pxToViewport({ rules: [['node_modules', p => p + 'vw']] })
-    ).process(basicCSS, {
+    const processed = postcss(pxToViewport({ rules: [['node_modules', (p) => p + 'vw']] })).process(basicCSS, {
       from: '/example/main.css'
     }).css
 
@@ -848,11 +722,9 @@ describe('rules', () => {
   })
 
   it('when using rules,the style font prop use vmin unit', () => {
-    const rules =
-      '.rule { border: 1px solid #000; font-size: 16px; margin: 1px 10px; }'
+    const rules = '.rule { border: 1px solid #000; font-size: 16px; margin: 1px 10px; }'
 
-    const expected =
-      '.rule { border: 1px solid #000; font-size: 4.266667vmin; margin: 1px 2.666667vw; }'
+    const expected = '.rule { border: 1px solid #000; font-size: 4.266667vmin; margin: 1px 2.666667vw; }'
 
     const processed = postcss(
       pxToViewport({

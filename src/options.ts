@@ -3,9 +3,7 @@ import type { Options } from './type'
 export const ignoreNextComment = 'px-to-viewport-ignore-next'
 export const ignorePrevComment = 'px-to-viewport-ignore'
 
-export const defaults: Required<
-  Omit<Options, 'exclude' | 'include' | 'rules'>
-> = {
+export const defaults: Required<Omit<Options, 'exclude' | 'include' | 'rules'>> = {
   unitToConvert: 'px',
   viewportWidth: 320,
   // viewportHeight: 568, // not now used; TODO: need for different units and math for different properties
